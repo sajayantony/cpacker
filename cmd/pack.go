@@ -15,35 +15,29 @@
 package cmd
 
 import (
-	"fmt"
+	"errors"
 
 	"github.com/sajayantony/cpacker/packer"
 	"github.com/spf13/cobra"
 )
 
 var packDirectory string
+var cntName string
 
 // packCmd represents the pack command
 var packCmd = &cobra.Command{
-	Use:   "pack",
-	Short: "Pack contents from the specified folder",
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("pack called")
-		packer.Pack(packDirectory)
+	Use:   "pack ContainerName",
+	Short: "Pack contents from the specified directory",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		if len(args) < 1 {
+			return errors.New("The containerName argument is required")
+		}
+		cntName = args[0]
+		return packer.Pack(packDirectory, cntName)
 	},
 }
 
 func init() {
 	RootCmd.AddCommand(packCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// packCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// packCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	packCmd.Flags().StringVarP(&packDirectory, "dir", "d", ".", "Source directory to pack contents from")
 }

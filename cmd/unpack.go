@@ -15,30 +15,32 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 
+	"github.com/sajayantony/cpacker/packer"
 	"github.com/spf13/cobra"
 )
+
+var outDir string
+var cntID string
 
 // unpackCmd represents the unpack command
 var unpackCmd = &cobra.Command{
 	Use:   "unpack",
 	Short: "unpack the package contents to a specified folder",
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("unpack called")
+	RunE: func(cmd *cobra.Command, args []string) error {
+		if len(args) < 1 {
+			return errors.New("The containerId argument is required")
+		}
+		fmt.Println(args)
+		cntID = args[0]
+		fmt.Println("Unpacking from container " + cntID)
+		return packer.Unpack(cntID, outDir)
 	},
 }
 
 func init() {
 	RootCmd.AddCommand(unpackCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// unpackCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// unpackCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	unpackCmd.Flags().StringVarP(&outDir, "outdir", "o", "./contents", "Output directory to unpack contents")
 }
