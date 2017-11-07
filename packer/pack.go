@@ -35,10 +35,10 @@ func EnsureDockerfile() {
 }
 
 //Pack ...
-func Pack() {
+func Pack(dir string) {
 	EnsureDockerfile()
 	filename, err := getDockerFile()
-	cmd := exec.Command("docker", "build", "-f..", filename, ".")
+	cmd := exec.Command("docker", "build", "-f", filename, dir)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err = cmd.Run()
