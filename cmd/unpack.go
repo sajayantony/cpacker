@@ -28,7 +28,7 @@ var cntID string
 // unpackCmd represents the unpack command
 var unpackCmd = &cobra.Command{
 	Use:   "unpack ImageName TargetDirectory",
-	Short: "unpack the package contents to a specified folder",
+	Short: "Unpack the package contents to a specified folder",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 2 {
 			return errors.New("The source image name and target directory are required")
