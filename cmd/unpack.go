@@ -27,14 +27,15 @@ var cntID string
 
 // unpackCmd represents the unpack command
 var unpackCmd = &cobra.Command{
-	Use:   "unpack",
+	Use:   "unpack ImageName TargetDirectory",
 	Short: "unpack the package contents to a specified folder",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if len(args) < 1 {
-			return errors.New("The containerId argument is required")
+		if len(args) < 2 {
+			return errors.New("The source image name and target directory are required")
 		}
 		fmt.Println(args)
 		cntID = args[0]
+		outDir = args[1]
 		fmt.Println("Unpacking from container " + cntID)
 		return packer.Unpack(cntID, outDir)
 	},
@@ -42,5 +43,4 @@ var unpackCmd = &cobra.Command{
 
 func init() {
 	RootCmd.AddCommand(unpackCmd)
-	unpackCmd.Flags().StringVarP(&outDir, "outdir", "o", "./contents", "Output directory to unpack contents")
 }

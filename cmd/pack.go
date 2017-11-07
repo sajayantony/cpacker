@@ -26,18 +26,18 @@ var cntName string
 
 // packCmd represents the pack command
 var packCmd = &cobra.Command{
-	Use:   "pack ContainerName",
+	Use:   "pack SourceDirectory ImageName",
 	Short: "Pack contents from the specified directory",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if len(args) < 1 {
-			return errors.New("The containerName argument is required")
+		if len(args) < 2 {
+			return errors.New("The source directory and container image name are required")
 		}
-		cntName = args[0]
+		packDirectory = args[0]
+		cntName = args[1]
 		return packer.Pack(packDirectory, cntName)
 	},
 }
 
 func init() {
 	RootCmd.AddCommand(packCmd)
-	packCmd.Flags().StringVarP(&packDirectory, "dir", "d", ".", "Source directory to pack contents from")
 }
